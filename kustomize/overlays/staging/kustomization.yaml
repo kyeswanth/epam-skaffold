@@ -1,0 +1,12 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../base
+
+images:
+  - name: my-app
+    newTag: staging-5678  # Example of a staging-specific image tag
+
+# patches:
+#   - path: values-staging.yaml
