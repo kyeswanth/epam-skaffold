@@ -25,7 +25,7 @@ jobs:
         uses: docker/login-action@v1
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+          password: ${{ secrets.DOCKER_PSSWORD }}
 
       - name: Set TAG based on branch
         id: set-tag
@@ -33,10 +33,10 @@ jobs:
           if [[ $GITHUB_REF == refs/heads/dev ]]; then
             echo "ENV=dev" >> $GITHUB_ENV
             echo "TAG=dev-${{ github.run_number }}" >> $GITHUB_ENV
-          elif [[ "${{ github.ref }}" == "refs/heads/staging" ]]; then
+          elif [[ $GITHUB_REF == "refs/heads/staging" ]]; then
             echo "ENV=staging" >> $GITHUB_ENV
             echo "TAG=stage-${{ github.run_number }}" >> $GITHUB_ENV
-          elif [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+          elif [[ $GITHUB_REF == "refs/heads/main" ]]; then
             echo "ENV=prod" >> $GITHUB_ENV
             echo "TAG=prod-$${{ github.run_number }}" >> $GITHUB_ENV
           fi
