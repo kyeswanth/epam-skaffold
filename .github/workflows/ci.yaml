@@ -29,7 +29,7 @@ jobs:
         run: |
           if [[ $GITHUB_REF == refs/heads/dev ]]; then
             echo "ENV=dev" >> $GITHUB_OUTPUT
-            echo "TAG=dev-${ github.run_number }}" >> $GITHUB_OUTPUT
+            echo "TAG=dev-${{} github.run_number }}" >> $GITHUB_OUTPUT
           elif [[ $GITHUB_REF == "refs/heads/staging" ]]; then
             echo "ENV=staging" >> $GITHUB_OUTPUT
             echo "TAG=stage-${{ github.run_number }}" >> $GITHUB_OUTPUT
