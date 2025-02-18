@@ -28,14 +28,14 @@ jobs:
         id: set-tag
         run: |
           if [[ $GITHUB_REF == refs/heads/dev ]]; then
-            echo "ENV=dev" >> $GITHUB_ENV
-            echo "TAG=dev-${{ github.run_number }}" >> $GITHUB_ENV
+            echo "ENV=dev" >> $GITHUB_OUTPUT
+            echo "TAG=dev-${ github.run_number }}" >> $GITHUB_OUTPUT
           elif [[ $GITHUB_REF == "refs/heads/staging" ]]; then
-            echo "ENV=staging" >> $GITHUB_ENV
-            echo "TAG=stage-${{ github.run_number }}" >> $GITHUB_ENV
+            echo "ENV=staging" >> $GITHUB_OUTPUT
+            echo "TAG=stage-${{ github.run_number }}" >> $GITHUB_OUTPUT
           elif [[ $GITHUB_REF == "refs/heads/main" ]]; then
-            echo "ENV=prod" >> $GITHUB_ENV
-            echo "TAG=prod-$${{ github.run_number }}" >> $GITHUB_ENV
+            echo "ENV=prod" >> $GITHUB_OUTPUT
+            echo "TAG=prod-${{ github.run_number }}" >> $GITHUB_OUTPUT
           fi
 
       - name: Build and Push Docker Image
