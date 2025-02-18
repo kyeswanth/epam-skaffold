@@ -29,7 +29,7 @@ jobs:
         run: |
           if [[ $GITHUB_REF == refs/heads/dev ]]; then
             echo "ENV=dev" >> $GITHUB_ENV
-            echo "TAG=dev-${{ github.run_number }}" >> $GITHUB_ENV
+            echo "TAG=latest" >> $GITHUB_ENV
           elif [[ $GITHUB_REF == "refs/heads/staging" ]]; then
             echo "ENV=staging" >> $GITHUB_ENV
             echo "TAG=stage-${{ github.run_number }}" >> $GITHUB_ENV
@@ -37,6 +37,21 @@ jobs:
             echo "ENV=prod" >> $GITHUB_ENV
             echo "TAG=prod-${{ github.run_number }}" >> $GITHUB_ENV
           fi
+
+      - name: Auto-Increment Build Number
+        run: |
+          BUILD_NUMBER=$(cat build_number.txt 2>/dev/null || echo 0)
+          NEW_BUILD_NUMBER=$((BUILD_NUMBER + 1))
+          echo $NEW_BUILD_NUMBER > build_number.txt
+          echo "BUILD_NUMBER=$NEW_BUILD_NUMBER" >> $GITHUB_ENV
+
+      - name: Commit Updated Build Number
+        run: |
+          git config --global user.email "github-actions@github.com"
+          git config --global user.name "GitHub Actions"
+          git add build_number.txt
+          git commit -m "Increment build number to ${{ env.BUILD_NUMBER }}" || echo "No changes to commit"
+          git push origin ${{ env.BRANCH }}
 
       - name: Build and Push Docker Image
         run: |
