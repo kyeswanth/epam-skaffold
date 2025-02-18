@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - dev
+      - staging
 
 jobs:
   build-and-deploy:
@@ -35,15 +36,15 @@ jobs:
           elif [[ "${{ github.ref }}" == "refs/heads/staging" ]]; then
             echo "ENV=staging" >> $GITHUB_ENV
             echo "TAG=stage-${{ github.run_number }}" >> $GITHUB_ENV
-          elif [[ "${{ github.ref }}" == "refs/heads/production" ]]; then
+          elif [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
             echo "ENV=prod" >> $GITHUB_ENV
             echo "TAG=prod-$${{ github.run_number }}" >> $GITHUB_ENV
           fi
 
       - name: Build and Push Docker Image
         run: |
-          docker build -t s1thk/epam-argocd:${{ env.TAG }} .
-          docker push s1thk/epam-argocd:${{ env.TAG }}
+          docker build -t s1thk/epam-argocd:$TAG .
+          docker push s1thk/epam-argocd:$TAG
 
       # - name: Install Kubectl and Kustomize
       #   run: |
@@ -58,4 +59,4 @@ jobs:
 
       # - name: Deploy to Kubernetes using Kustomize
       #   run: |
-      #     kubectl apply -k k8s/overlays/${{ env.ENV }}
+      #     kubectl apply -k k8s/overlays/$ENV
